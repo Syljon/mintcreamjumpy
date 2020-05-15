@@ -1,12 +1,30 @@
 function checkCardNumber(input) {
-  if (isNumberValid(input)) {
-    return "";
+  const str = input.toString();
+  if (isNumberValid(str)) {
+    return getValidProvider(str);
   }
   return "Nieprawidłowy";
 }
 
+function getValidProvider(input) {
+  const isMasterCard =
+    str.length === 16 &&
+    ["51", "52", "53", "54", "55"].includes(str.slice(0, 2));
+  const isVisa =
+    (str.length === 13 || str.length === 16) && str.startsWith("4");
+  const isAmericanExpress =
+    str.length === 15 && ["34", "37"].includes(str.slice(0, 2));
+  if (isMasterCard) {
+    return "MasterCard";
+  } else if (isVisa) {
+    return "Visa";
+  } else if (isAmericanExpress) {
+    return "American Express";
+  }
+  return "Nieprawidłowy";
+}
 function isNumberValid(input) {
-  const str = input.toString();
+  if (input.length === 0) return false;
   const numberArray = str.length % 2 ? [...str] : ["0", ...str];
 
   const even = numberArray
@@ -25,6 +43,4 @@ function isNumberValid(input) {
   return (even + odd) % 10 === 0;
 }
 
-console.log(checkCardNumber(123));
-console.log(checkCardNumber(5193080150954111));
 module.exports = checkCardNumber;
